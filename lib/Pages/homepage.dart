@@ -5,6 +5,14 @@ import 'package:rahbar_restarted/Pages/allAlumniPage.dart';
 import 'package:rahbar_restarted/Pages/queriPage.dart';
 import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
 
+// ===== ডেস্কটপ আপডেট কার্যকারিতার জন্য প্রয়োজনীয় ইম্পোর্ট =====
+import 'package:flutter/foundation.dart' show kIsWeb; // Web প্ল্যাটফর্ম চেক করার জন্য
+import 'dart:io' show Platform; // Desktop প্ল্যাটফর্ম চেক করার জন্য
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
   @override
@@ -24,7 +32,8 @@ class _HomepageState extends State<Homepage> {
         _isSearchFocused = _searchFocusNode.hasFocus;
       });
     });
-    // ===== আপডেট চেক করার ফাংশন কলটি সরিয়ে ফেলা হয়েছে =====
+    // ===== অ্যাপ চালু হওয়ার সময় আপডেট চেক করার জন্য ফাংশন কল =====
+    _checkForUpdate();
   }
 
   @override
@@ -34,7 +43,94 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
-  // ===== ইন-অ্যাপ আপডেট সম্পর্কিত সব ফাংশন সরিয়ে ফেলা হয়েছে =====
+  // ===== ডেস্কটপ ইন-অ্যাপ আপডেট কার্যকারিতার জন্য ফাংশনগুলো =====
+
+  Future<void> _checkForUpdate() async {
+    // শুধুমাত্র ডেস্কটপ প্ল্যাটফর্মের জন্য আপডেট চেক করবে (Web বা Mobile-এর জন্য নয়)
+    if (kIsWeb || (!Platform.isWindows && !Platform.isMacOS)) {
+      return;
+    }
+
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String currentVersion = packageInfo.version;
+
+      // আপনার রিপোজিটরির সঠিক URL এখানে দিন
+      final response = await http.get(Uri.parse(
+          'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/update.json'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+
+        String platformKey = '';
+        if (Platform.isWindows) platformKey = 'windows';
+        if (Platform.isMacOS) platformKey = 'macos';
+
+        if (json.containsKey(platformKey)) {
+          String latestVersion = json[platformKey]['version'];
+          String downloadUrl = json[platformKey]['url'];
+
+          if (latestVersion.compareTo(currentVersion) > 0) {
+            _showUpdateDialog(latestVersion, downloadUrl);
+          } else {
+            _showUpToDateSnackbar();
+          }
+        }
+      }
+    } catch (e) {
+      print('Failed to check for updates: $e');
+    }
+  }
+
+  void _showUpToDateSnackbar() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('You are using the latest version.'),
+            backgroundColor: Colors.green[600],
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.all(10),
+          ),
+        );
+      }
+    });
+  }
+
+  void _showUpdateDialog(String version, String url) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("New Update Available!"),
+          content: Text("A new version (v$version) is available. Would you like to download it?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Later"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text("Download"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _launchDownloadUrl(url);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchDownloadUrl(String url) async {
+    final Uri downloadUri = Uri.parse(url);
+    if (await canLaunchUrl(downloadUri)) {
+      await launchUrl(downloadUri, mode: LaunchMode.externalApplication);
+    } else {
+      print('Could not launch $url');
+    }
+  }
 
   // একটি helper widget যা প্রতিটি কার্ড তৈরি করবে (অপরিবর্তিত)
   Widget _buildClickableCard(CardItem item) {

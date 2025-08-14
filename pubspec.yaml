@@ -39,7 +39,7 @@ dependencies:
   url_launcher: ^6.3.2
   flutter_typeahead: ^5.2.0
   substring_highlight: ^1.0.33
-  http: ^1.2.1
+  http: ^1.5.0
   package_info_plus: ^8.3.1
   ota_update: ^7.0.2
 
