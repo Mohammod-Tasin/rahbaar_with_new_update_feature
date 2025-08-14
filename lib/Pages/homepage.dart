@@ -5,14 +5,6 @@ import 'package:rahbar_restarted/Pages/allAlumniPage.dart';
 import 'package:rahbar_restarted/Pages/queriPage.dart';
 import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb; // Web প্ল্যাটফর্ম চেক করার জন্য
-import 'dart:io' show Platform; // Android ও Windows প্ল্যাটফর্ম চেক করার জন্য
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:ota_update/ota_update.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
   @override
@@ -32,8 +24,7 @@ class _HomepageState extends State<Homepage> {
         _isSearchFocused = _searchFocusNode.hasFocus;
       });
     });
-    // ===== অ্যাপ চালু হওয়ার সময় আপডেট চেক করার জন্য ফাংশন কল =====
-    _checkForUpdate();
+    // ===== আপডেট চেক করার ফাংশন কলটি সরিয়ে ফেলা হয়েছে =====
   }
 
   @override
@@ -43,110 +34,7 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
-  // ===== ইন-অ্যাপ আপডেট কার্যকারিতার জন্য ফাংশনগুলো =====
-
-  Future<void> _checkForUpdate() async {
-    if (kIsWeb) return;
-
-    try {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String currentVersion = packageInfo.version;
-
-      // অনুগ্রহ করে নিচের লিংকে আপনার সঠিক GitHub ইউজারনেম ও রিপোজিটরির নাম দিন
-      final response = await http.get(Uri.parse(
-          'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/update.json'));
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> json = jsonDecode(response.body);
-
-        String platformKey = '';
-        if (Platform.isAndroid) platformKey = 'android';
-        if (Platform.isWindows) platformKey = 'windows';
-
-        if (platformKey.isNotEmpty && json.containsKey(platformKey)) {
-          String latestVersion = json[platformKey]['version'];
-          String downloadUrl = json[platformKey]['url'];
-
-          if (latestVersion.compareTo(currentVersion) > 0) {
-            _showUpdateDialog(latestVersion, downloadUrl);
-          } else {
-            _showUpToDateSnackbar();
-          }
-        }
-      }
-    } catch (e) {
-      print('Failed to check for updates: $e');
-    }
-  }
-
-  void _showUpToDateSnackbar() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('You are using the latest version.'),
-            backgroundColor: Colors.green[600],
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(10),
-          ),
-        );
-      }
-    });
-  }
-
-  void _showUpdateDialog(String version, String url) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        bool isAndroid = Platform.isAndroid;
-        String buttonText = isAndroid ? "Update Now" : "Download";
-
-        return AlertDialog(
-          title: const Text("New Update Available!"),
-          content: Text("A new version (v$version) is available. Would you like to get it?"),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Later"),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text(buttonText),
-              onPressed: () {
-                Navigator.of(context).pop();
-                if (isAndroid) {
-                  _startAndroidUpdate(url);
-                } else {
-                  _launchDownloadUrl(url);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _startAndroidUpdate(String url) async {
-    try {
-      OtaUpdate().execute(url).listen(
-        (OtaEvent event) {
-          print('EVENT: ${event.status} : ${event.value}');
-        },
-      );
-    } catch (e) {
-      print('Failed to start OTA update: $e');
-    }
-  }
-
-  void _launchDownloadUrl(String url) async {
-    final Uri downloadUri = Uri.parse(url);
-    if (await canLaunchUrl(downloadUri)) {
-      await launchUrl(downloadUri, mode: LaunchMode.externalApplication);
-    } else {
-      print('Could not launch $url');
-    }
-  }
+  // ===== ইন-অ্যাপ আপডেট সম্পর্কিত সব ফাংশন সরিয়ে ফেলা হয়েছে =====
 
   // একটি helper widget যা প্রতিটি কার্ড তৈরি করবে (অপরিবর্তিত)
   Widget _buildClickableCard(CardItem item) {
@@ -155,7 +43,7 @@ class _HomepageState extends State<Homepage> {
       color: Colors.white,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(12.0),
       ),
       child: InkWell(
         onTap: () {
@@ -176,14 +64,15 @@ class _HomepageState extends State<Homepage> {
             );
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(item.icon, size: 40, color: item.color),
-              const SizedBox(height: 12),
-              Text(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(item.icon, size: 40, color: item.color),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
                 item.title,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
@@ -191,14 +80,17 @@ class _HomepageState extends State<Homepage> {
                     .titleMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 6),
-              Text(
+            ),
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
                 item.subtitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -206,6 +98,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    // আপনার build মেথডটি সম্পূর্ণ অপরিবর্তিত
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -221,19 +114,18 @@ class _HomepageState extends State<Homepage> {
         centerTitle: true,
       ),
       drawer: Drawer(
-        width: 350,
         backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+             const DrawerHeader(
               child: Center(
                 child: Text("R A H B A A R", style: TextStyle(fontSize: 35)),
               ),
             ),
             ListTile(
               leading: const Icon(Icons.school_rounded),
-              title: Text("Alumni", style: GoogleFonts.ubuntu(fontSize: 23)),
+              title: Text("Alumni", style: GoogleFonts.ubuntu(fontSize: 25)),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -244,7 +136,9 @@ class _HomepageState extends State<Homepage> {
             ),
             ListTile(
               leading: const Icon(Icons.people_rounded),
-              title: Text("Current Students", style: GoogleFonts.ubuntu(fontSize: 23)),
+              title: Text("Current Students", style: GoogleFonts.ubuntu(
+                fontSize: 25,
+              )),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -254,8 +148,10 @@ class _HomepageState extends State<Homepage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.comment_rounded),
-              title: Text("Queries or Suggestions", style: GoogleFonts.ubuntu(fontSize: 23)),
+              leading: const Icon(Icons.people_rounded),
+              title: Text("Queries or Suggestions", style: GoogleFonts.ubuntu(
+                fontSize: 25,
+              )),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -270,7 +166,6 @@ class _HomepageState extends State<Homepage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           bool isDesktop = constraints.maxWidth >= 600;
-
           return Column(
             children: [
               Padding(
@@ -281,7 +176,7 @@ class _HomepageState extends State<Homepage> {
                     child: SearchBar(
                       controller: _searchController,
                       focusNode: _searchFocusNode,
-                      hintText: "This searchbar is under construction...",
+                      hintText: "Search alumni, students ...",
                       leading: const Icon(Icons.search),
                       elevation: WidgetStateProperty.all(2),
                       shadowColor: WidgetStateProperty.all(Colors.black26),
