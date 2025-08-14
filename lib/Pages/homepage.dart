@@ -57,7 +57,7 @@ class _HomepageState extends State<Homepage> {
 
       // আপনার রিপোজিটরির সঠিক URL এখানে দিন
       final response = await http.get(Uri.parse(
-          'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/update.json'));
+          'https://raw.githubusercontent.com/Mohammod-Tasin/rahbaar_with_new_update_feature/refs/heads/for_desktop/update.json'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> json = jsonDecode(response.body);
