@@ -210,6 +210,7 @@ class _HomepageState extends State<Homepage> {
         centerTitle: true,
       ),
       drawer: Drawer(
+        width: 350,
         backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
@@ -221,7 +222,7 @@ class _HomepageState extends State<Homepage> {
             ),
             ListTile(
               leading: const Icon(Icons.school_rounded),
-              title: Text("Alumni", style: GoogleFonts.ubuntu(fontSize: 25)),
+              title: Text("Alumni", style: GoogleFonts.ubuntu(fontSize: 23)),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -233,7 +234,7 @@ class _HomepageState extends State<Homepage> {
             ListTile(
               leading: const Icon(Icons.people_rounded),
               title: Text("Current Students", style: GoogleFonts.ubuntu(
-                fontSize: 25,
+                fontSize: 23,
               )),
               onTap: () {
                 Navigator.pop(context);
@@ -246,7 +247,7 @@ class _HomepageState extends State<Homepage> {
             ListTile(
               leading: const Icon(Icons.people_rounded),
               title: Text("Queries or Suggestions", style: GoogleFonts.ubuntu(
-                fontSize: 25,
+                fontSize: 23,
               )),
               onTap: () {
                 Navigator.pop(context);
