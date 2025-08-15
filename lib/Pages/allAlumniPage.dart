@@ -27,7 +27,7 @@ class _AllalumnipageState extends State<Allalumnipage> {
   Future<void> _fetchAllAlumni() async {
     try {
       final List<Map<String, dynamic>> data = await Supabase.instance.client
-          .from('Alumni Datas')
+          .from('CSV')
           .select('*')
           .order('name', ascending: true);
       if (mounted) {
