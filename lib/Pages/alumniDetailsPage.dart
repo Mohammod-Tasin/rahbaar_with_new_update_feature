@@ -1,4 +1,4 @@
-// lib/Pages/alumniDetailsPage.dart
+
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,8 +9,6 @@ class Alumnidetailspage extends StatelessWidget {
 
   const Alumnidetailspage({super.key, required this.alumnus});
 
-  // ===== নতুন ফাংশন যোগ করা হয়েছে =====
-  // ইমেইল অ্যাপ চালু করার ফাংশন
   Future<void> _launchEmail(String email, BuildContext context) async {
     if (email.isEmpty || email == 'N/A') return;
 
