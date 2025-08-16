@@ -41,7 +41,9 @@ dependencies:
   substring_highlight: ^1.0.33
   http: ^1.5.0
   package_info_plus: ^8.3.1
-  ota_update: ^7.0.2
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.6
+
 
 
 dev_dependencies:
@@ -98,3 +100,19 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "assets/icon/appLogo.jpg"
+
+flutter_native_splash:
+  color: "#FFFFFF" # স্প্ল্যাশ স্ক্রিনের الخلفية রঙ (সাদা)
+  image: assets/icon/appLogo.jpg # আপনার লোগোর পাথ
+
+  # অ্যান্ড্রয়েডের জন্য নির্দিষ্ট কনফিগারেশন
+  android_12:
+    color: "#FFFFFF"
+    image: assets/icon/appLogo.jpg
+
+  # আপনি চাইলে gravity ব্যবহার করে লোগোকে মাঝে আনতে পারেন
+  android_gravity: center
