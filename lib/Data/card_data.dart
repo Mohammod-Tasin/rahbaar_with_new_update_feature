@@ -26,7 +26,7 @@ const List<CardItem> cardItems = [
   ),
   CardItem(
     title: "Current Student Page",
-    subtitle: "Get Info of current students connected to Tabligh",
+    subtitle: "Page is under construction",
     icon: Icons.people_rounded,
     color: Colors.black,
   ),
@@ -48,12 +48,12 @@ const List<CardItem> cardItems = [
   //   icon: Icons.photo_album,
   //   color: Colors.black,
   // ),
-  // CardItem(
-  //   title: "Mentorship",
-  //   subtitle: "Connect with mentors",
-  //   icon: Icons.school,
-  //   color: Colors.black,
-  // ),
+  CardItem(
+    title: "Updates",
+    subtitle: "You're using the latest version. You will be prompted here to install new versions as they become available.",
+    icon: Icons.browser_updated_rounded,
+    color: Colors.black,
+  ),
   CardItem(
     title: "Queries or Suggestions",
     subtitle: "Any suggestions or queries are welcomed",
