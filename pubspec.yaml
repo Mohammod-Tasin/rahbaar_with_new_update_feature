@@ -115,4 +115,4 @@ flutter_native_splash:
     image: assets/icon/appLogo.jpg
 
   # আপনি চাইলে gravity ব্যবহার করে লোগোকে মাঝে আনতে পারেন
-  android_gravity: center
+  android_gravity: fill
