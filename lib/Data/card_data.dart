@@ -42,12 +42,12 @@ const List<CardItem> cardItems = [
   //   icon: Icons.article,
   //   color: Colors.black,
   // ),
-  // CardItem(
-  //   title: "Gallery",
-  //   subtitle: "Event photos",
-  //   icon: Icons.photo_album,
-  //   color: Colors.black,
-  // ),
+  CardItem(
+    title: "Gallery",
+    subtitle: "Event photos",
+    icon: Icons.photo_album,
+    color: Colors.black,
+  ),
   CardItem(
     title: "Updates",
     subtitle: "You're using the latest version. You will be prompted here to install new versions as they become available.",
