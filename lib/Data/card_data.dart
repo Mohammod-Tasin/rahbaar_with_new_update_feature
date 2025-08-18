@@ -19,13 +19,13 @@ class CardItem {
 // By keeping it in a separate file, your UI code stays clean.
 const List<CardItem> cardItems = [
   CardItem(
-    title: "Alumni page",
-    subtitle: "Get Info of Alumni's connected to Tabligh",
+    title: "Alumni Directory",
+    subtitle: "Get Info of Alumnus connected to Tabligh",
     icon: Icons.school_rounded,
     color: Colors.black,
   ),
   CardItem(
-    title: "Current Student Page",
+    title: "Current Students Directory",
     subtitle: "Page is under construction",
     icon: Icons.people_rounded,
     color: Colors.black,
@@ -49,8 +49,9 @@ const List<CardItem> cardItems = [
   //   color: Colors.black,
   // ),
   CardItem(
-    title: "Updates",
-    subtitle: "You're using the latest version. You will be prompted here to install new versions as they become available.",
+    title: "New version Available",
+    // subtitle: "You're using the latest version. You will be prompted here to install new versions as they become available.",
+    subtitle: "Click here to download",
     icon: Icons.browser_updated_rounded,
     color: Colors.black,
   ),
