@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 23.03.02+1
+version: 23.03.04+1
 
 environment:
   sdk: ^3.8.1
@@ -41,7 +41,9 @@ dependencies:
   substring_highlight: ^1.0.33
   http: ^1.5.0
   package_info_plus: ^8.3.1
-  ota_update: ^7.0.2
+  flutter_native_splash: ^2.4.7
+  flutter_launcher_icons: ^0.14.4
+
 
 
 dev_dependencies:
@@ -67,7 +69,13 @@ flutter:
   uses-material-design: true
   assets:
     - shorebird.yaml
+    - assets/Logo.png
 
+
+flutter_launcher_icons:
+  image_path: "assets/Logo.png"
+  windows:
+    generate: true
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

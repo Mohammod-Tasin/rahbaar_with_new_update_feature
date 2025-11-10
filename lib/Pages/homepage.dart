@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rahbar_restarted/Data/card_data.dart';
-import 'package:rahbar_restarted/Pages/allAlumniPage.dart';
-import 'package:rahbar_restarted/Pages/queriPage.dart';
-import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
+import 'package:rahbar_restarted/Data/card_data.dart'; // আপনার ফাইল পাথ
+import 'package:rahbar_restarted/Pages/allAlumniPage.dart'; // আপনার ফাইল পাথ
+import 'package:rahbar_restarted/Pages/queriPage.dart'; // আপনার ফাইল পাথ
+import 'package:rahbar_restarted/Pages/currentStudentPage.dart'; // আপনার ফাইল পাথ
 
-// ===== ডেস্কটপ আপডেট কার্যকারিতার জন্য প্রয়োজনীয় ইম্পোর্ট =====
-import 'package:flutter/foundation.dart' show kIsWeb; // Web প্ল্যাটফর্ম চেক করার জন্য
-import 'dart:io' show Platform; // Desktop প্ল্যাটফর্ম চেক করার জন্য
+// ===== আপডেট কার্যকারিতার জন্য প্রয়োজনীয় ইম্পোর্ট =====
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -24,6 +24,11 @@ class _HomepageState extends State<Homepage> {
   final FocusNode _searchFocusNode = FocusNode();
   bool _isSearchFocused = false;
 
+  // ===== রিপোজিটরির তথ্য =====
+  // ===== পরিবর্তনটি এখানে করা হয়েছে (সঠিক API URL) =====
+  final String _repoUrl =
+      'https://api.github.com/repos/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/latest';
+
   @override
   void initState() {
     super.initState();
@@ -32,7 +37,7 @@ class _HomepageState extends State<Homepage> {
         _isSearchFocused = _searchFocusNode.hasFocus;
       });
     });
-    // ===== অ্যাপ চালু হওয়ার সময় আপডেট চেক করার জন্য ফাংশন কল =====
+    // অ্যাপ চালু হওয়ার সময় আপডেট চেক করার জন্য ফাংশন কল
     _checkForUpdate();
   }
 
@@ -43,37 +48,42 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
-  // ===== ডেস্কটপ ইন-অ্যাপ আপডেট কার্যকারিতার জন্য ফাংশনগুলো =====
+  // ===== ইন-অ্যাপ আপডেট ফাংশন (আপগ্রেড করা হয়েছে) =====
 
   Future<void> _checkForUpdate() async {
-    // শুধুমাত্র ডেস্কটপ প্ল্যাটফর্মের জন্য আপডেট চেক করবে (Web বা Mobile-এর জন্য নয়)
+    // শুধুমাত্র ডেস্কটপ প্ল্যাটফর্মের জন্য আপডেট চেক করবে
     if (kIsWeb || (!Platform.isWindows && !Platform.isMacOS)) {
       return;
     }
 
     try {
+      // ১. অ্যাপের বর্তমান ভার্সন চেক করা
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String currentVersion = packageInfo.version;
 
-      // আপনার রিপোজিটরির সঠিক URL এখানে দিন
-      final response = await http.get(Uri.parse(
-          'https://raw.githubusercontent.com/Mohammod-Tasin/rahbaar_with_new_update_feature/refs/heads/for_desktop/update.json'));
+      // ২. GitHub API থেকে সর্বশেষ রিলিজের তথ্য আনা
+      final response = await http.get(Uri.parse(_repoUrl));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> json = jsonDecode(response.body);
 
-        String platformKey = '';
-        if (Platform.isWindows) platformKey = 'windows';
-        if (Platform.isMacOS) platformKey = 'macos';
+        // ৩. ভার্সন তুলনা করা (ট্যাগ থেকে 'v' অক্ষরটি বাদ দিয়ে)
+        String latestVersionTag = json['tag_name'] ?? 'v0.0.0';
+        String latestVersion = latestVersionTag.replaceFirst('v', '');
 
-        if (json.containsKey(platformKey)) {
-          String latestVersion = json[platformKey]['version'];
-          String downloadUrl = json[platformKey]['url'];
+        // compareTo ব্যবহার করে ভার্সন তুলনা করা
+        // যদি GitHub ভার্সন > বর্তমান ভার্সন হয়, তবেই পপ-আপ দেখাবে
+        if (latestVersion.compareTo(currentVersion) > 0) {
+          // ৪. নতুন ভার্সন পেলে .zip ফাইলের URL খুঁজে বের করা
+          final List<dynamic> assets = json['assets'] ?? [];
+          final Map<String, dynamic>? asset = assets.firstWhere(
+            (a) => a['name'].endsWith('.zip'), // .zip ফাইলটি খুঁজবে
+            orElse: () => null,
+          );
 
-          if (latestVersion.compareTo(currentVersion) > 0) {
+          if (asset != null) {
+            String downloadUrl = asset['browser_download_url'];
             _showUpdateDialog(latestVersion, downloadUrl);
-          } else {
-            _showUpToDateSnackbar();
           }
         }
       }
@@ -82,29 +92,15 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  void _showUpToDateSnackbar() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('You are using the latest version.'),
-            backgroundColor: Colors.green[600],
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.all(10),
-          ),
-        );
-      }
-    });
-  }
-
+  // এই ফাংশনটি অপরিবর্তিত
   void _showUpdateDialog(String version, String url) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("New Update Available!"),
-          content: Text("A new version (v$version) is available. Would you like to download it?"),
+          content: Text(
+              "A new version (v$version) is available. Would you like to download it?"),
           actions: <Widget>[
             TextButton(
               child: const Text("Later"),
@@ -123,6 +119,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  // এই ফাংশনটি অপরিবর্তিত
   void _launchDownloadUrl(String url) async {
     final Uri downloadUri = Uri.parse(url);
     if (await canLaunchUrl(downloadUri)) {
@@ -151,7 +148,8 @@ class _HomepageState extends State<Homepage> {
           } else if (item.title == "Current Student Page") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Currentstudentpage()),
+              MaterialPageRoute(
+                  builder: (context) => const Currentstudentpage()),
             );
           } else if (item.title == "Queries or Suggestions") {
             Navigator.push(
@@ -194,7 +192,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    // আপনার build মেথডটি সম্পূর্ণ অপরিবর্তিত
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -202,7 +199,9 @@ class _HomepageState extends State<Homepage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.hub_outlined),
+            Image.asset('assets/Logo.png',
+              height: 40, width: 40,
+            ),
             const SizedBox(width: 8),
             Text("Rahbaar", style: GoogleFonts.ubuntu()),
           ],
@@ -215,7 +214,7 @@ class _HomepageState extends State<Homepage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-             const DrawerHeader(
+            const DrawerHeader(
               child: Center(
                 child: Text("R A H B A A R", style: TextStyle(fontSize: 35)),
               ),
@@ -233,22 +232,25 @@ class _HomepageState extends State<Homepage> {
             ),
             ListTile(
               leading: const Icon(Icons.people_rounded),
-              title: Text("Current Students", style: GoogleFonts.ubuntu(
-                fontSize: 23,
-              )),
+              title: Text("Current Students",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 23,
+                  )),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Currentstudentpage()),
+                  MaterialPageRoute(
+                      builder: (context) => const Currentstudentpage()),
                 );
               },
             ),
             ListTile(
-              leading: const Icon(Icons.people_rounded),
-              title: Text("Queries or Suggestions", style: GoogleFonts.ubuntu(
-                fontSize: 23,
-              )),
+              leading: const Icon(Icons.comment_rounded),
+              title: Text("Queries or Suggestions",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 23,
+                  )),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -273,13 +275,21 @@ class _HomepageState extends State<Homepage> {
                     child: SearchBar(
                       controller: _searchController,
                       focusNode: _searchFocusNode,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Allalumnipage()),
+                        );
+                      },
                       hintText: "Search alumni, students ...",
                       leading: const Icon(Icons.search),
                       elevation: WidgetStateProperty.all(2),
                       shadowColor: WidgetStateProperty.all(Colors.black26),
                       backgroundColor: MaterialStateProperty.all(Colors.white),
                       shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       padding: WidgetStateProperty.all(
                         const EdgeInsets.symmetric(horizontal: 16),
@@ -308,7 +318,8 @@ class _HomepageState extends State<Homepage> {
                         ),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         itemCount: cardItems.length,
                         itemBuilder: (context, index) {
                           final item = cardItems[index];
