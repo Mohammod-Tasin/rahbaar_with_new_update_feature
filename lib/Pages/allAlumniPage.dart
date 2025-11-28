@@ -167,46 +167,46 @@ class _AllalumnipageState extends State<Allalumnipage> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _allAlumni.isEmpty
-                    ? const Center(child: Text('No alumni found.'))
-                    : ListView.builder(
-                        itemCount: _allAlumni.length,
-                        itemBuilder: (context, index) {
-                          final alumni = _allAlumni[index];
-                          final imageUrl = alumni['profile_image_url'] ?? '';
-                          final alumniName = alumni['name'] ?? 'N/A';
-                          final alumniDept = alumni['Department'] ?? '';
-                          final alumniSeries = alumni['Series']?.toString() ?? '';
+                ? const Center(child: Text('No alumni found.'))
+                : ListView.builder(
+              itemCount: _allAlumni.length,
+              itemBuilder: (context, index) {
+                final alumni = _allAlumni[index];
+                final imageUrl = alumni['profile_image_url'] ?? '';
+                final alumniName = alumni['name'] ?? 'N/A';
+                final alumniDept = alumni['Department'] ?? '';
+                final alumniSeries = alumni['Series']?.toString() ?? '';
 
-                          return Card(
-                            color: Colors.white,
-                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                            elevation: 2,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                backgroundImage: (imageUrl.isNotEmpty && Uri.parse(imageUrl).isAbsolute)
-                                    ? NetworkImage(imageUrl)
-                                    : null, // <-- এখানে কোলন (:) হবে
-                                child: (imageUrl.isEmpty || !Uri.parse(imageUrl).isAbsolute)
-                                    ? Text(alumniName.isNotEmpty ? alumniName[0].toUpperCase() : 'A',
-                                        style: TextStyle(color: Colors.grey[700]),
-                                      )
-                                    : null, // <-- এখানেও কোলন (:) হবে
-                              ),
-                              title: Text(alumniName, style: const TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle: Text('$alumniDept - $alumniSeries'),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Alumnidetailspage(alumnus: alumni),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                return Card(
+                  color: Colors.white,
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  elevation: 2,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      backgroundImage: (imageUrl.isNotEmpty && Uri.parse(imageUrl).isAbsolute)
+                          ? NetworkImage(imageUrl)
+                          : null, // <-- এখানে কোলন (:) হবে
+                      child: (imageUrl.isEmpty || !Uri.parse(imageUrl).isAbsolute)
+                          ? Text(alumniName.isNotEmpty ? alumniName[0].toUpperCase() : 'A',
+                        style: TextStyle(color: Colors.grey[700]),
+                      )
+                          : null, // <-- এখানেও কোলন (:) হবে
+                    ),
+                    title: Text(alumniName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('$alumniDept - $alumniSeries'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Alumnidetailspage(alumnus: alumni),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

@@ -7,6 +7,7 @@ class CardItem {
   final IconData icon;
   final Color color;
 
+
   const CardItem({
     required this.title,
     required this.subtitle,
@@ -19,16 +20,16 @@ class CardItem {
 // By keeping it in a separate file, your UI code stays clean.
 const List<CardItem> cardItems = [
   CardItem(
-    title: "Alumni Directory",
-    subtitle: "Get Info of Alumnus connected to Tabligh",
+    title: "Alumni page",
+    subtitle: "Get Info of Alumni's connected to Tabligh",
     icon: Icons.school_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
   CardItem(
-    title: "Current Students Directory",
-    subtitle: "Page is under construction",
+    title: "Current Student Page",
+    subtitle: "Get Info of current students connected to Tabligh",
     icon: Icons.people_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
   // CardItem(
   //   title: "Job Board",
@@ -48,17 +49,16 @@ const List<CardItem> cardItems = [
   //   icon: Icons.photo_album,
   //   color: Colors.black,
   // ),
-  CardItem(
-    title: "New version Available",
-    // subtitle: "You're using the latest version. You will be prompted here to install new versions as they become available.",
-    subtitle: "Click here to download",
-    icon: Icons.browser_updated_rounded,
-    color: Colors.black,
-  ),
+  // CardItem(
+  //   title: "Mentorship",
+  //   subtitle: "Connect with mentors",
+  //   icon: Icons.school,
+  //   color: Colors.black,
+  // ),
   CardItem(
     title: "Queries or Suggestions",
     subtitle: "Any suggestions or queries are welcomed",
     icon: Icons.comment_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
 ];

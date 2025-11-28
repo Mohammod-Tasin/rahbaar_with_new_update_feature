@@ -1,4 +1,4 @@
-
+// lib/Pages/alumniDetailsPage.dart
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +9,8 @@ class Alumnidetailspage extends StatelessWidget {
 
   const Alumnidetailspage({super.key, required this.alumnus});
 
+  // ===== নতুন ফাংশন যোগ করা হয়েছে =====
+  // ইমেইল অ্যাপ চালু করার ফাংশন
   Future<void> _launchEmail(String email, BuildContext context) async {
     if (email.isEmpty || email == 'N/A') return;
 
@@ -29,7 +31,10 @@ class Alumnidetailspage extends StatelessWidget {
 
   // ফোন ডায়ালার চালু করার ফাংশন
   Future<void> _launchPhone(String phoneNumber, BuildContext context) async {
-    if (phoneNumber.isEmpty || phoneNumber == 'N/A' || phoneNumber == 'Not Available') return;
+    if (phoneNumber.isEmpty ||
+        phoneNumber == 'N/A' ||
+        phoneNumber == 'Not Available')
+      return;
 
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
 
@@ -41,7 +46,6 @@ class Alumnidetailspage extends StatelessWidget {
       );
     }
   }
-
 
   // ===== _buildInfoRow উইজেটটি আপডেট করা হয়েছে =====
   Widget _buildInfoRow({
@@ -74,7 +78,9 @@ class Alumnidetailspage extends StatelessWidget {
                     value,
                     style: TextStyle(
                       color: isClickable ? Colors.blue[800] : Colors.grey[700],
-                      decoration: isClickable ? TextDecoration.underline : TextDecoration.none,
+                      decoration: isClickable
+                          ? TextDecoration.underline
+                          : TextDecoration.none,
                       decorationColor: Colors.blue[800],
                     ),
                   ),
@@ -102,13 +108,13 @@ class Alumnidetailspage extends StatelessWidget {
                 isPresent
                     ? Icon(Icons.check_circle, color: Colors.green, size: 20)
                     : Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    shape: BoxShape.circle,
+                  ),
+                ),
                 if (!isLast)
                   Expanded(
                     child: Container(
@@ -156,8 +162,10 @@ class Alumnidetailspage extends StatelessWidget {
     final department = alumnus['Department'] ?? 'N/A';
     final email = alumnus['email'] ?? 'N/A';
     final phone = alumnus['Phone No.'] ?? 'N/A';
-    final alternativePhone = alumnus['Alternative Phone No.'] ?? 'Not Available';
-    final presentAddress = alumnus['Present Address in Detail'] ?? 'Not Available';
+    final alternativePhone =
+        alumnus['Alternative Phone No.'] ?? 'Not Available';
+    final presentAddress =
+        alumnus['Present Address in Detail'] ?? 'Not Available';
     final college = alumnus['College'] ?? 'N/A';
     final daysInTableegh = alumnus['Days in Tableegh'] ?? 'N/A';
     final homeDistrict = alumnus['Home District'] ?? 'N/A';
@@ -165,7 +173,7 @@ class Alumnidetailspage extends StatelessWidget {
 
     final List<dynamic> careerHistory = alumnus['career_history'] ?? [];
 
-// ডেটাবেজ থেকে অন্যান্য তথ্যের সাথে ছবির URL টিও নিয়ে আসা হচ্ছে
+    // ডেটাবেজ থেকে অন্যান্য তথ্যের সাথে ছবির URL টিও নিয়ে আসা হচ্ছে
     final imageUrl = alumnus['profile_image_url'] ?? '';
 
     careerHistory.sort((a, b) {
@@ -192,25 +200,30 @@ class Alumnidetailspage extends StatelessWidget {
             children: [
               // build method এর ভেতরে...
 
+              // ... বাকি কোড ...
 
-// ... বাকি কোড ...
-
-// ===== উপরের প্রোফাইল সেকশন (পরিবর্তিত) =====
-CircleAvatar(
-    radius: 60,
-    backgroundColor: Colors.white,
-    // নিচের backgroundImage প্রপার্টি যোগ করা হয়েছে
-    backgroundImage: (imageUrl.isNotEmpty && Uri.parse(imageUrl).isAbsolute)
-        ? NetworkImage(imageUrl) // URL থাকলে নেটওয়ার্ক থেকে ছবি দেখাবে
-        : null,
-    // URL না থাকলে আগের মতো নামের প্রথম অক্ষর দেখাবে
-    child: (imageUrl.isEmpty || !Uri.parse(imageUrl).isAbsolute)
-        ? Text(
-            name.isNotEmpty ? name[0].toUpperCase() : 'A',
-            style: const TextStyle(fontSize: 36, color: Colors.white),
-          )
-        : null,
-),
+              // ===== উপরের প্রোফাইল সেকশন (পরিবর্তিত) =====
+              CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.white,
+                // নিচের backgroundImage প্রপার্টি যোগ করা হয়েছে
+                backgroundImage:
+                (imageUrl.isNotEmpty && Uri.parse(imageUrl).isAbsolute)
+                    ? NetworkImage(
+                  imageUrl,
+                ) // URL থাকলে নেটওয়ার্ক থেকে ছবি দেখাবে
+                    : null,
+                // URL না থাকলে আগের মতো নামের প্রথম অক্ষর দেখাবে
+                child: (imageUrl.isEmpty || !Uri.parse(imageUrl).isAbsolute)
+                    ? Text(
+                  name.isNotEmpty ? name[0].toUpperCase() : 'A',
+                  style: const TextStyle(
+                    fontSize: 36,
+                    color: Colors.white,
+                  ),
+                )
+                    : null,
+              ),
               const SizedBox(height: 16),
               Text(
                 name.toUpperCase(),
@@ -316,7 +329,8 @@ CircleAvatar(
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: careerHistory.length,
                       itemBuilder: (context, index) {
-                        final job = careerHistory[index] as Map<String, dynamic>;
+                        final job =
+                        careerHistory[index] as Map<String, dynamic>;
                         final bool isLast = index == careerHistory.length - 1;
                         return _buildCareerTile(job, isLast: isLast);
                       },

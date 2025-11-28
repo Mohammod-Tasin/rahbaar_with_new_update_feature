@@ -4,8 +4,7 @@ import 'package:rahbar_restarted/Data/card_data.dart';
 import 'package:rahbar_restarted/Pages/allAlumniPage.dart';
 import 'package:rahbar_restarted/Pages/queriPage.dart';
 import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
-import 'package:rahbar_restarted/Pages/updatePage.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -14,39 +13,204 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
-  bool _isSearchFocused = false;
+  // ইংরেজি অ্যানিমেশন শুরু করার জন্য ফ্ল্যাগ
+  bool _startEnglishAnimation = false;
 
   @override
-  void initState() {
-    super.initState();
-    _searchFocusNode.addListener(() {
-      setState(() {
-        _isSearchFocused = _searchFocusNode.hasFocus;
-      });
-    });
-  }
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/rahbar_new_logo.jpg',
+              height: 30,
+              width: 30,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "Rahbaar",
+              style: GoogleFonts.ubuntu(color: const Color(0xFF000832)),
+            ),
+          ],
+        ),
+        centerTitle: true,
+      ),
+      drawer: Drawer(
+        width: 350,
+        backgroundColor: Colors.white,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              child: Center(
+                child: Text(
+                  "R A H B A R",
+                  style: TextStyle(fontSize: 35, color: Color(0xFF000832)),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.school_rounded),
+              title: Text("Alumni",
+                  style: GoogleFonts.ubuntu(
+                      fontSize: 23, color: const Color(0xFF000832))),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Allalumnipage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.people_rounded),
+              title: Text("Current Students",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 23,
+                    color: const Color(0xFF000832),
+                  )),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Currentstudentpage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.comment_rounded),
+              title: Text("Queries or Suggestions",
+                  style: GoogleFonts.ubuntu(
+                    fontSize: 23,
+                    color: const Color(0xFF000832),
+                  )),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Queripage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isDesktop = constraints.maxWidth >= 600;
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 12.0),
+                child: Center(
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    // ===== অ্যানিমেটেড টেক্সট সেকশন =====
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // আরবি টেক্সট (এটি আগে অ্যানিমেট হবে)
+                        DefaultTextStyle(
+                          style: GoogleFonts.amiri(
+                            // কুরআনিক স্টাইল ফন্ট
+                            fontSize: 28.0,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF000832),
+                            height: 2.5, // ওভারল্যাপ ঠিক করার জন্য লাইন হাইট বাড়ানো হয়েছে
+                          ),
+                          textAlign: TextAlign.center,
+                          child: AnimatedTextKit(
+                            animatedTexts: [
+                              TypewriterAnimatedText(
+                                'وَأْمُرْ أَهْلَكَ بِالصَّلَاةِ وَاصْطَبِرْ عَلَيْهَا ۖ لَا نَسْأَلُكَ رِزْقًا ۖ نَحْنُ نَرْزُقُكَ ۗ وَالْعَاقِبَةُ لِلتَّقْوَىٰ',
+                                speed: const Duration(milliseconds: 100),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                            isRepeatingAnimation: false, // লুপ হবে না
+                            totalRepeatCount: 1,
+                            onFinished: () {
+                              // আরবি শেষ হলে ইংরেজি শুরু হবে
+                              setState(() {
+                                _startEnglishAnimation = true;
+                              });
+                            },
+                          ),
+                        ),
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
+                        const SizedBox(height: 10),
 
-  // URL চালু করার জন্য নতুন helper function
-  Future<void> _launchURL(String urlString) async {
-    final Uri url = Uri.parse(urlString);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not launch $urlString')),
-        );
-      }
-    }
+                        // ইংরেজি টেক্সট (আরবি শেষ হওয়ার পর এটি আসবে)
+                        if (_startEnglishAnimation)
+                          DefaultTextStyle(
+                            style: GoogleFonts.lora(
+                              // ক্লাসিক সেরিফ ফন্ট
+                              fontSize: 16.0,
+                              fontStyle: FontStyle.italic,
+                              color: const Color(0xFF555555), // একটু হালকা রঙ
+                            ),
+                            textAlign: TextAlign.center,
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'Bid your people to pray, and be diligent in ˹observing˺ it. We do not ask you to provide. It is We Who provide for you. And the ultimate outcome is ˹only˺ for ˹the people of˺ righteousness.',
+                                  speed: const Duration(milliseconds: 50),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                              isRepeatingAnimation: false,
+                              totalRepeatCount: 1,
+                            ),
+                          ),
+                      ],
+                    ),
+                    // ===================================
+                  ),
+                ),
+              ),
+              Expanded(
+                child: isDesktop
+                    ? SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 20.0,
+                      runSpacing: 20.0,
+                      children: cardItems.map((item) {
+                        return SizedBox(
+                          width: 280,
+                          height: 180,
+                          child: _buildClickableCard(item),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                )
+                    : ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  itemCount: cardItems.length,
+                  itemBuilder: (context, index) {
+                    final item = cardItems[index];
+                    return Container(
+                      height: 160,
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      child: _buildClickableCard(item),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   // একটি helper widget যা প্রতিটি কার্ড তৈরি করবে
@@ -60,31 +224,23 @@ class _HomepageState extends State<Homepage> {
       ),
       child: InkWell(
         onTap: () {
-          if (item.title == "Alumni Directory") {
+          if (item.title == "Alumni page") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Allalumnipage()),
             );
-          } else if (item.title == "Current Students Directory") {
+          } else if (item.title == "Current Student Page") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Currentstudentpage()),
+              MaterialPageRoute(
+                  builder: (context) => const Currentstudentpage()),
             );
           } else if (item.title == "Queries or Suggestions") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Queripage()),
-            );}
-          // } else if (item.title == "New version Available") {
-          //   // ===== পরিবর্তনটি এখানে করা হয়েছে =====
-          //   // "Updates" কার্ডটি এখন সরাসরি একটি লিংকে নিয়ে যাবে
-          //   // আপনি Shorebird patch দিয়ে এই URL টি পরিবর্তন করতে পারবেন
-          //   // Navigator.push(
-          //   //   context,
-          //   //   MaterialPageRoute(builder: (context) => const Updatepage()),
-          //   // );
-            _launchURL('https://github.com/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/download/23.02.01/sh_release_03.apk');
-
+            );
+          }
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -114,140 +270,6 @@ class _HomepageState extends State<Homepage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.hub_outlined),
-            const SizedBox(width: 8),
-            Text("Rahbaar", style: GoogleFonts.ubuntu()),
-          ],
-        ),
-        centerTitle: true,
-      ),
-      drawer: Drawer(
-        width: 350,
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              child: Center(
-                child: Text("R A H B A A R", style: TextStyle(fontSize: 35)),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.school_rounded),
-              title: Text("Alumnus Directory", style: GoogleFonts.ubuntu(fontSize: 23)),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Allalumnipage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.people_rounded),
-              title: Text("Current Students Directory", style: GoogleFonts.ubuntu(
-                fontSize: 23,
-              )),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Currentstudentpage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.comment_rounded),
-              title: Text("Queries or Suggestions", style: GoogleFonts.ubuntu(
-                fontSize: 23,
-              )),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Queripage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          bool isDesktop = constraints.maxWidth >= 600;
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 12.0),
-                child: Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 700),
-                    child: SearchBar(
-                      controller: _searchController,
-                      focusNode: _searchFocusNode,
-                      hintText: "Searchbar is under construction...",
-                      leading: const Icon(Icons.search),
-                      elevation: WidgetStateProperty.all(2),
-                      shadowColor: WidgetStateProperty.all(Colors.black26),
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      padding: WidgetStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 16),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: isDesktop
-                    ? SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 20.0,
-                      runSpacing: 20.0,
-                      children: cardItems.map((item) {
-                        return SizedBox(
-                          width: 280,
-                          height: 180,
-                          child: _buildClickableCard(item),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                )
-                    : ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  itemCount: cardItems.length,
-                  itemBuilder: (context, index) {
-                    final item = cardItems[index];
-                    return Container(
-                      height: 160,
-                      margin: const EdgeInsets.only(bottom: 16.0),
-                      child: _buildClickableCard(item),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
       ),
     );
   }

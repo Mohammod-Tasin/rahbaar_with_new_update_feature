@@ -25,7 +25,7 @@ class Queripage extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: Colors.teal),
+      leading: Icon(icon, color: Colors.grey),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text(subtitle, style: TextStyle(color: Colors.blue[800])),
       onTap: onTap,
@@ -52,7 +52,7 @@ class Queripage extends StatelessWidget {
               // ===== ডেভেলপারের ছবি =====
               const CircleAvatar(
                 radius: 60,
-                backgroundColor: Colors.teal,
+                backgroundColor: Color(0xFF000832),
                 // আপনি চাইলে এখানে নেটওয়ার্ক থেকে ছবি দেখাতে পারেন
                 // backgroundImage: NetworkImage('YOUR_IMAGE_URL_HERE'),
                 child: Icon(Icons.person, size: 60, color: Colors.white),
@@ -107,16 +107,8 @@ class Queripage extends StatelessWidget {
                     //     context,
                     //   ),
                     // ),
-                    const Divider(height: 1),
-                    _buildContactTile(
-                      icon: Icons.code,
-                      title: "GitHub",
-                      subtitle: "github.com/your-username", // <-- আপনার গিটহাব প্রোফাইল
-                      onTap: () => _launchURL(
-                        'https://github.com/your-username', // <-- আপনার গিটহাব প্রোফাইল
-                        context,
-                      ),
-                    ),
+
+
                   ],
                 ),
               ),
