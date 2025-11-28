@@ -1,15 +1,13 @@
-// lib/Pages/studentDetailsPage.dart
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Studentdetailspage extends StatelessWidget {
-  final Map<String, dynamic> student; // 'alumnus' theke 'student' kora hoyeche
+  final Map<String, dynamic> student;
 
   const Studentdetailspage({super.key, required this.student});
 
-  // ===== Email ar Phone launch korar function (Oporibortito) =====
+  // ===== Email ar Phone launch korar function =====
   Future<void> _launchEmail(String email, BuildContext context) async {
     if (email.isEmpty || email == 'N/A') return;
     final Uri emailUri = Uri(
@@ -27,8 +25,13 @@ class Studentdetailspage extends StatelessWidget {
   }
 
   Future<void> _launchPhone(String phoneNumber, BuildContext context) async {
-    if (phoneNumber.isEmpty || phoneNumber == 'N/A' || phoneNumber == 'Not Available') return;
-    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (phoneNumber.isEmpty ||
+        phoneNumber == 'N/A' ||
+        phoneNumber == 'Not Available') return;
+
+    final String cleanedNumber = phoneNumber.replaceAll(RegExp(r'[^0-9+]'), '');
+    final Uri phoneUri = Uri(scheme: 'tel', path: cleanedNumber);
+
     if (await canLaunchUrl(phoneUri)) {
       await launchUrl(phoneUri);
     } else {
@@ -38,7 +41,7 @@ class Studentdetailspage extends StatelessWidget {
     }
   }
 
-  // ===== Info Row Widget (Oporibortito) =====
+  // ===== Info Row Widget =====
   Widget _buildInfoRow({
     required IconData icon,
     required String title,
@@ -53,7 +56,8 @@ class Studentdetailspage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 20, color: Colors.black54),
+            // ===== পরিবর্তন: আইকনের রঙ Grey করা হয়েছে =====
+            Icon(icon, size: 20, color: Colors.grey),
             const SizedBox(width: 20),
             Expanded(
               child: Column(
@@ -68,7 +72,9 @@ class Studentdetailspage extends StatelessWidget {
                     value,
                     style: TextStyle(
                       color: isClickable ? Colors.blue[800] : Colors.grey[700],
-                      decoration: isClickable ? TextDecoration.underline : TextDecoration.none,
+                      decoration: isClickable
+                          ? TextDecoration.underline
+                          : TextDecoration.none,
                       decorationColor: Colors.blue[800],
                     ),
                   ),
@@ -81,93 +87,22 @@ class Studentdetailspage extends StatelessWidget {
     );
   }
 
-  // ===== Career Tile Widget (Oporibortito) =====
-  Widget _buildCareerTile(Map<String, dynamic> job, {required bool isLast}) {
-    final bool isPresent = job['is_present'] ?? false;
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            width: 30,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                isPresent
-                    ? Icon(Icons.check_circle, color: Colors.green, size: 20)
-                    : Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                if (!isLast)
-                  Expanded(
-                    child: Container(
-                      width: 2,
-                      color: Colors.teal.withOpacity(0.5),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    job['position'] ?? 'N/A',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: isPresent ? Colors.green[800] : Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    job['company'] ?? 'N/A',
-                    style: const TextStyle(color: Colors.black54),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    // ===== Data gulo 'student' variable theke neya hocche =====
     final name = student['name'] ?? 'N/A';
-    final series = student['Series']?.toString() ?? 'N/A';
-    final department = student['Department'] ?? 'N/A';
+    final series = student['series']?.toString() ?? 'N/A';
+    final department = student['dept'] ?? 'N/A';
     final email = student['email'] ?? 'N/A';
-    final phone = student['Phone No.'] ?? 'N/A';
-    final alternativePhone = student['Alternative Phone No.'] ?? 'Not Available';
-    final presentAddress = student['Present Address in Detail'] ?? 'Not Available';
-    final college = student['College'] ?? 'N/A';
-    final daysInTableegh = student['Days in Tableegh'] ?? 'N/A';
+    final phone = student['phone_no_whatsapp']?.toString() ?? 'N/A';
+
+    final alternativePhone = student['alternative_phone_no']?.toString() ?? '';
     final homeDistrict = student['Home District'] ?? 'N/A';
     final bloodGroup = student['Blood Group'] ?? 'N/A';
-    final List<dynamic> careerHistory = student['career_history'] ?? [];
-    final imageUrl = student['profile_image_url'] ?? '';
 
-    careerHistory.sort((a, b) {
-      bool isAPresent = a['is_present'] ?? false;
-      bool isBPresent = b['is_present'] ?? false;
-      if (isAPresent) return -1;
-      if (isBPresent) return 1;
-      int serialA = a['serial'] ?? 999;
-      int serialB = b['serial'] ?? 999;
-      return serialA.compareTo(serialB);
-    });
+    final presentAddress = student['present_address'] ?? 'N/A';
+    final college = student['College'] ?? 'N/A';
+    final imageUrl = student['img_url'] ?? '';
+    final daysInTableegh = student['Days in Tableegh']?.toString() ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -181,18 +116,21 @@ class Studentdetailspage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Profile Section
+              // ===== Profile Section =====
               CircleAvatar(
                 radius: 60,
-                backgroundColor: Colors.white,
+                // প্রোফাইল ছবির ব্যাকগ্রাউন্ডটি লোগোর রঙেই (Navy Blue) রাখা হয়েছে
+                backgroundColor: (imageUrl.isNotEmpty && Uri.parse(imageUrl).isAbsolute)
+                    ? Colors.white
+                    : const Color(0xFF0D253F),
                 backgroundImage: (imageUrl.isNotEmpty && Uri.parse(imageUrl).isAbsolute)
                     ? NetworkImage(imageUrl)
                     : null,
                 child: (imageUrl.isEmpty || !Uri.parse(imageUrl).isAbsolute)
                     ? Text(
-                        name.isNotEmpty ? name[0].toUpperCase() : 'A',
-                        style: const TextStyle(fontSize: 36, color: Colors.white),
-                      )
+                  name.isNotEmpty ? name[0].toUpperCase() : 'A',
+                  style: const TextStyle(fontSize: 48, color: Colors.white),
+                )
                     : null,
               ),
               const SizedBox(height: 16),
@@ -205,11 +143,12 @@ class Studentdetailspage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "Series: $series | Department: $department",
+                "Series: $series | Dept: $department",
                 style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               ),
               const SizedBox(height: 24),
-              // Details Card
+
+              // ===== Details Card =====
               Card(
                 color: Colors.white,
                 surfaceTintColor: Colors.white,
@@ -230,17 +169,21 @@ class Studentdetailspage extends StatelessWidget {
                       const Divider(),
                       _buildInfoRow(
                         icon: Icons.phone_outlined,
-                        title: "Phone",
+                        title: "Phone (WhatsApp)",
                         value: phone,
                         onTap: () => _launchPhone(phone, context),
                       ),
-                      const Divider(),
-                      _buildInfoRow(
-                        icon: Icons.phone_android_outlined,
-                        title: "Alternative Phone",
-                        value: alternativePhone,
-                        onTap: () => _launchPhone(alternativePhone, context),
-                      ),
+
+                      if (alternativePhone.isNotEmpty && alternativePhone != 'N/A') ...[
+                        const Divider(),
+                        _buildInfoRow(
+                          icon: Icons.phone_android_outlined,
+                          title: "Alternative Phone No",
+                          value: alternativePhone,
+                          onTap: () => _launchPhone(alternativePhone, context),
+                        ),
+                      ],
+
                       const Divider(),
                       _buildInfoRow(
                         icon: Icons.location_on_outlined,
@@ -249,21 +192,15 @@ class Studentdetailspage extends StatelessWidget {
                       ),
                       const Divider(),
                       _buildInfoRow(
-                        icon: Icons.school_rounded,
-                        title: "College",
-                        value: college,
-                      ),
-                      const Divider(),
-                      _buildInfoRow(
-                        icon: Icons.shield_moon_rounded,
-                        title: "Days in Tableegh",
-                        value: daysInTableegh,
-                      ),
-                      const Divider(),
-                      _buildInfoRow(
-                        icon: Icons.home_rounded,
+                        icon: Icons.home,
                         title: "Home District",
                         value: homeDistrict,
+                      ),
+                      const Divider(),
+                      _buildInfoRow(
+                        icon: Icons.school,
+                        title: "Previous College",
+                        value: college,
                       ),
                       const Divider(),
                       _buildInfoRow(
@@ -271,43 +208,17 @@ class Studentdetailspage extends StatelessWidget {
                         title: "Blood Group",
                         value: bloodGroup,
                       ),
+
+                      const Divider(),
+                      _buildInfoRow(
+                        icon: Icons.shield_moon,
+                        title: "Days In Tableegh",
+                        value: daysInTableegh,
+                      ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              // Career History Section
-              if (careerHistory.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.work_history_outlined, color: Colors.teal),
-                        SizedBox(width: 8),
-                        Text(
-                          'Career History',
-                          style: GoogleFonts.ubuntu(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    ListView.builder(
-                      padding: const EdgeInsets.only(left: 4),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: careerHistory.length,
-                      itemBuilder: (context, index) {
-                        final job = careerHistory[index] as Map<String, dynamic>;
-                        final bool isLast = index == careerHistory.length - 1;
-                        return _buildCareerTile(job, isLast: isLast);
-                      },
-                    ),
-                  ],
-                ),
             ],
           ),
         ),

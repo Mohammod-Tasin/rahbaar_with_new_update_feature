@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rahbar_restarted/Data/card_data.dart'; // আপনার ফাইল পাথ
-import 'package:rahbar_restarted/Pages/allAlumniPage.dart'; // আপনার ফাইল পাথ
-import 'package:rahbar_restarted/Pages/queriPage.dart'; // আপনার ফাইল পাথ
-import 'package:rahbar_restarted/Pages/currentStudentPage.dart'; // আপনার ফাইল পাথ
+import 'package:rahbar_restarted/Data/card_data.dart';
+import 'package:rahbar_restarted/Pages/allAlumniPage.dart';
+import 'package:rahbar_restarted/Pages/queriPage.dart';
+import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
 
-// ===== আপডেট কার্যকারিতার জন্য প্রয়োজনীয় ইম্পোর্ট =====
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -20,64 +20,54 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final TextEditingController _searchController = TextEditingController();
-  final FocusNode _searchFocusNode = FocusNode();
-  bool _isSearchFocused = false;
+  // ===== ভার্সন ভ্যারিয়েবল =====
+  String _currentVersion = "";
 
-  // ===== রিপোজিটরির তথ্য =====
-  // ===== পরিবর্তনটি এখানে করা হয়েছে (সঠিক API URL) =====
+  // ===== অ্যানিমেশন কন্ট্রোল করার জন্য ভ্যারিয়েবল =====
+  bool _startEnglishAnimation = false;
+
   final String _repoUrl =
       'https://api.github.com/repos/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/latest';
 
   @override
   void initState() {
     super.initState();
-    _searchFocusNode.addListener(() {
-      setState(() {
-        _isSearchFocused = _searchFocusNode.hasFocus;
-      });
-    });
-    // অ্যাপ চালু হওয়ার সময় আপডেট চেক করার জন্য ফাংশন কল
     _checkForUpdate();
+    _loadVersion();
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _searchFocusNode.dispose();
-    super.dispose();
+  Future<void> _loadVersion() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      if (mounted) {
+        setState(() {
+          _currentVersion = packageInfo.version;
+        });
+      }
+    } catch (e) {
+      print("Failed to get package info: $e");
+    }
   }
 
-  // ===== ইন-অ্যাপ আপডেট ফাংশন (আপগ্রেড করা হয়েছে) =====
-
+  // ===== ইন-অ্যাপ আপডেট ফাংশন =====
   Future<void> _checkForUpdate() async {
-    // শুধুমাত্র ডেস্কটপ প্ল্যাটফর্মের জন্য আপডেট চেক করবে
     if (kIsWeb || (!Platform.isWindows && !Platform.isMacOS)) {
       return;
     }
-
     try {
-      // ১. অ্যাপের বর্তমান ভার্সন চেক করা
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String currentVersion = packageInfo.version;
-
-      // ২. GitHub API থেকে সর্বশেষ রিলিজের তথ্য আনা
       final response = await http.get(Uri.parse(_repoUrl));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> json = jsonDecode(response.body);
-
-        // ৩. ভার্সন তুলনা করা (ট্যাগ থেকে 'v' অক্ষরটি বাদ দিয়ে)
         String latestVersionTag = json['tag_name'] ?? 'v0.0.0';
         String latestVersion = latestVersionTag.replaceFirst('v', '');
 
-        // compareTo ব্যবহার করে ভার্সন তুলনা করা
-        // যদি GitHub ভার্সন > বর্তমান ভার্সন হয়, তবেই পপ-আপ দেখাবে
         if (latestVersion.compareTo(currentVersion) > 0) {
-          // ৪. নতুন ভার্সন পেলে .zip ফাইলের URL খুঁজে বের করা
           final List<dynamic> assets = json['assets'] ?? [];
           final Map<String, dynamic>? asset = assets.firstWhere(
-            (a) => a['name'].endsWith('.zip'), // .zip ফাইলটি খুঁজবে
+                (a) => a['name'].endsWith('.zip'),
             orElse: () => null,
           );
 
@@ -92,7 +82,6 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  // এই ফাংশনটি অপরিবর্তিত
   void _showUpdateDialog(String version, String url) {
     showDialog(
       context: context,
@@ -119,7 +108,6 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // এই ফাংশনটি অপরিবর্তিত
   void _launchDownloadUrl(String url) async {
     final Uri downloadUri = Uri.parse(url);
     if (await canLaunchUrl(downloadUri)) {
@@ -129,7 +117,6 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  // একটি helper widget যা প্রতিটি কার্ড তৈরি করবে (অপরিবর্তিত)
   Widget _buildClickableCard(CardItem item) {
     return Card(
       elevation: 4,
@@ -199,11 +186,15 @@ class _HomepageState extends State<Homepage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/Logo.png',
-              height: 40, width: 40,
+            Image.asset(
+              'assets/Logo.png',
+              height: 30,
+              width: 30,
             ),
             const SizedBox(width: 8),
-            Text("Rahbaar", style: GoogleFonts.ubuntu()),
+            Text("Rahbaar", style: GoogleFonts.ubuntu(
+              color: Color(0xFF000832)
+            )),
           ],
         ),
         centerTitle: true,
@@ -216,12 +207,12 @@ class _HomepageState extends State<Homepage> {
           children: [
             const DrawerHeader(
               child: Center(
-                child: Text("R A H B A A R", style: TextStyle(fontSize: 35)),
+                child: Text("R A H B A R", style: TextStyle(fontSize: 35, color: Color(0xFF000832))),
               ),
             ),
             ListTile(
               leading: const Icon(Icons.school_rounded),
-              title: Text("Alumni", style: GoogleFonts.ubuntu(fontSize: 23)),
+              title: Text("Alumni", style: GoogleFonts.ubuntu(fontSize: 23, color: Color(0xFF000832))),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -235,6 +226,7 @@ class _HomepageState extends State<Homepage> {
               title: Text("Current Students",
                   style: GoogleFonts.ubuntu(
                     fontSize: 23,
+                      color: Color(0xFF000832)
                   )),
               onTap: () {
                 Navigator.pop(context);
@@ -259,6 +251,15 @@ class _HomepageState extends State<Homepage> {
                 );
               },
             ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              child: Text(
+                _currentVersion.isNotEmpty ? "Version v$_currentVersion" : "Loading version...",
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
@@ -271,65 +272,100 @@ class _HomepageState extends State<Homepage> {
                 padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 12.0),
                 child: Center(
                   child: Container(
-                    constraints: const BoxConstraints(maxWidth: 700),
-                    child: SearchBar(
-                      controller: _searchController,
-                      focusNode: _searchFocusNode,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Allalumnipage()),
-                        );
-                      },
-                      hintText: "Search alumni, students ...",
-                      leading: const Icon(Icons.search),
-                      elevation: WidgetStateProperty.all(2),
-                      shadowColor: WidgetStateProperty.all(Colors.black26),
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      padding: WidgetStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 16),
-                      ),
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    // ===== অ্যানিমেটেড টেক্সট সেকশন =====
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // আরবি টেক্সট (এটি আগে অ্যানিমেট হবে)
+                        DefaultTextStyle(
+                          style: GoogleFonts.amiri( // কুরআনিক স্টাইল ফন্ট
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF000832),
+                            height: 2.5, // লাইন হাইট বাড়ানো হয়েছে যাতে অক্ষর কেটে না যায়
+                          ),
+                          textAlign: TextAlign.center,
+                          child: AnimatedTextKit(
+                            animatedTexts: [
+                              TypewriterAnimatedText(
+                                'وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا ۖ لَا نَسْـَٔلُكَ رِزْقًۭا ۖ نَّحْنُ نَرْزُقُكَ ۗ وَٱلْعَـٰقِبَةُ لِلتَّقْوَىٰ',
+                                speed: const Duration(milliseconds: 100),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                            isRepeatingAnimation: false, // লুপ হবে না
+                            totalRepeatCount: 1,
+                            onFinished: () {
+                              // আরবি শেষ হলে ইংরেজি শুরু হবে
+                              setState(() {
+                                _startEnglishAnimation = true;
+                              });
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // ইংরেজি টেক্সট (আরবি শেষ হওয়ার পর এটি আসবে)
+                        if (_startEnglishAnimation)
+                          DefaultTextStyle(
+                            style: GoogleFonts.lora( // ক্লাসিক স্টাইল ফন্ট
+                              fontSize: 18.0,
+                              fontStyle: FontStyle.italic,
+                              color: Color(0xFFC5A059),
+                            ),
+                            textAlign: TextAlign.center,
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'Bid your people to pray, and be diligent in ˹observing˺ it. We do not ask you to provide. It is We Who provide for you. And the ultimate outcome is ˹only˺ for ˹the people of˺ righteousness. 20:132',
+                                  speed: const Duration(milliseconds: 50),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                              isRepeatingAnimation: false,
+                              totalRepeatCount: 1,
+                            ),
+                          ),
+                      ],
                     ),
+                    // ===================================
                   ),
                 ),
               ),
               Expanded(
                 child: isDesktop
                     ? SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 20.0,
-                            runSpacing: 20.0,
-                            children: cardItems.map((item) {
-                              return SizedBox(
-                                width: 280,
-                                height: 180,
-                                child: _buildClickableCard(item),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      )
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 20.0,
+                      runSpacing: 20.0,
+                      children: cardItems.map((item) {
+                        return SizedBox(
+                          width: 280,
+                          height: 180,
+                          child: _buildClickableCard(item),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        itemCount: cardItems.length,
-                        itemBuilder: (context, index) {
-                          final item = cardItems[index];
-                          return Container(
-                            height: 160,
-                            margin: const EdgeInsets.only(bottom: 16.0),
-                            child: _buildClickableCard(item),
-                          );
-                        },
-                      ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  itemCount: cardItems.length,
+                  itemBuilder: (context, index) {
+                    final item = cardItems[index];
+                    return Container(
+                      height: 160,
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      child: _buildClickableCard(item),
+                    );
+                  },
+                ),
               ),
             ],
           );

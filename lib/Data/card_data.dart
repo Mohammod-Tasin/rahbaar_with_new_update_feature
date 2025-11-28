@@ -7,6 +7,7 @@ class CardItem {
   final IconData icon;
   final Color color;
 
+
   const CardItem({
     required this.title,
     required this.subtitle,
@@ -22,13 +23,13 @@ const List<CardItem> cardItems = [
     title: "Alumni page",
     subtitle: "Get Info of Alumni's connected to Tabligh",
     icon: Icons.school_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
   CardItem(
     title: "Current Student Page",
     subtitle: "Get Info of current students connected to Tabligh",
     icon: Icons.people_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
   // CardItem(
   //   title: "Job Board",
@@ -58,6 +59,6 @@ const List<CardItem> cardItems = [
     title: "Queries or Suggestions",
     subtitle: "Any suggestions or queries are welcomed",
     icon: Icons.comment_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
 ];
