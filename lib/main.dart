@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:rahbar_restarted/Pages/homepage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:rahbar_restarted/Pages/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Homepage(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
       title: "Rahbaar",
     );
