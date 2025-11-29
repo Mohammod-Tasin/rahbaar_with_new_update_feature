@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToHome() async {
     // ৩ সেকেন্ড অপেক্ষা করবে
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1, microseconds: 500));
 
     if (mounted) {
       // ৩ সেকেন্ড পর Homepage-এ চলে যাবে এবং এই পেজটি রিমুভ করে দেবে
@@ -40,9 +40,16 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // আপনার লোগো ফাইল (যেটি আইকনের জন্য ব্যবহার করেছিলেন)
-            Image.asset(
-              'assets/rahbar_new_logo.png', // <-- আপনার লোগো ফাইলের সঠিক পাথ দিন
-              width: 150, // আপনার পছন্দমতো সাইজ দিন
+            Card(
+              elevation: 8,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              child: Image.asset(
+                'assets/Rahbar Logo.png', // <-- আপনার লোগো ফাইলের সঠিক পাথ দিন
+                width: 150, // আপনার পছন্দমতো সাইজ দিন
+              ),
             ),
             const SizedBox(height: 20),
             const CircularProgressIndicator(

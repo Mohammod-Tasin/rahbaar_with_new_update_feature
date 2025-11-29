@@ -193,7 +193,7 @@ class _HomepageState extends State<Homepage> {
             ),
             const SizedBox(width: 5),
             Text("A H B A R", style: GoogleFonts.ubuntu(
-              color: Color(0xFF000832)
+                color: Color(0xFF000832)
             )),
           ],
         ),
@@ -225,7 +225,7 @@ class _HomepageState extends State<Homepage> {
               leading: const Icon(Icons.people_rounded),
               title: Text("Current Students",
                   style: GoogleFonts.ubuntu(
-                    fontSize: 23,
+                      fontSize: 23,
                       color: Color(0xFF000832)
                   )),
               onTap: () {
