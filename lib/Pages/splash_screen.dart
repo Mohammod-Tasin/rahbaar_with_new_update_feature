@@ -39,7 +39,6 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // আপনার লোগো ফাইল (যেটি আইকনের জন্য ব্যবহার করেছিলেন)
             Card(
               elevation: 8,
               color: Colors.white,
@@ -47,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(20)
               ),
               child: Image.asset(
-                'assets/Rahbar Logo.png', // <-- আপনার লোগো ফাইলের সঠিক পাথ দিন
+                'assets/Logo/Rahbar Logo.png', // <-- আপনার লোগো ফাইলের সঠিক পাথ দিন
                 width: 150, // আপনার পছন্দমতো সাইজ দিন
               ),
             ),

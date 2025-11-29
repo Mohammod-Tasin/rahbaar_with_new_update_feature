@@ -6,7 +6,6 @@ import 'package:rahbar_restarted/Pages/studentDetailsPage.dart'; // Your file pa
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:substring_highlight/substring_highlight.dart';
-import 'package:rahbar_restarted/Pages/studentDetailsPage.dart';
 
 class Currentstudentpage extends StatefulWidget {
   const Currentstudentpage({super.key});
@@ -88,8 +87,7 @@ class _CurrentstudentpageState extends State<Currentstudentpage> {
               itemBuilder: (context, suggestion) {
                 final imageUrl = suggestion['img_url'] ?? '';
                 final studentName = suggestion['name'] ?? 'N/A'; // Updated column name
-                final department = suggestion['dept'] ?? ''; // Updated column name
-                final roll = suggestion['roll']?.toString() ?? ''; // Updated column name
+                final department = suggestion['dept'] ?? ''; // Updated column name// Updated column name
                 final series = suggestion['series']?.toString()?? '';
 
                 return ListTile(

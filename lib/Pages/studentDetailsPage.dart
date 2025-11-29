@@ -169,7 +169,7 @@ class Studentdetailspage extends StatelessWidget {
                       const Divider(),
                       _buildInfoRow(
                         icon: Icons.phone_outlined,
-                        title: "Phone (WhatsApp)",
+                        title: "Phone Number(WhatsApp)",
                         value: phone,
                         onTap: () => _launchPhone(phone, context),
                       ),
@@ -178,7 +178,7 @@ class Studentdetailspage extends StatelessWidget {
                         const Divider(),
                         _buildInfoRow(
                           icon: Icons.phone_android_outlined,
-                          title: "Alternative Phone No",
+                          title: "Alternative Phone Number",
                           value: alternativePhone,
                           onTap: () => _launchPhone(alternativePhone, context),
                         ),
