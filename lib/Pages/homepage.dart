@@ -127,12 +127,12 @@ class _HomepageState extends State<Homepage> {
       ),
       child: InkWell(
         onTap: () {
-          if (item.title == "Alumni page") {
+          if (item.title == "Alumnus") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Allalumnipage()),
             );
-          } else if (item.title == "Current Student Page") {
+          } else if (item.title == "Current Students") {
             Navigator.push(
               context,
               MaterialPageRoute(

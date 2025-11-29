@@ -75,7 +75,9 @@ flutter:
 
 
 flutter_launcher_icons:
+  ios: true
   image_path: "assets/Rahbar Logo.png"
+  android: "launcher_icon"
   windows:
     generate: true
   # To add assets to your application, add an assets section, like this:
