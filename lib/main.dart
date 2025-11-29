@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rahbar_restarted/Pages/homepage.dart';
+import 'package:rahbar_restarted/Pages/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Homepage(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
       title: "Rahbaar",
     );

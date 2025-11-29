@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             // আপনার লোগো ফাইল (যেটি আইকনের জন্য ব্যবহার করেছিলেন)
             Image.asset(
-              'assets/Logo.png', // <-- আপনার লোগো ফাইলের সঠিক পাথ দিন
+              'assets/rahbar_new_logo.png', // <-- আপনার লোগো ফাইলের সঠিক পাথ দিন
               width: 150, // আপনার পছন্দমতো সাইজ দিন
             ),
             const SizedBox(height: 20),
