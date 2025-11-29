@@ -44,6 +44,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.6
   animated_text_kit: ^4.3.0
+  flutter_svg: ^2.2.3
 
 
 
@@ -71,6 +72,7 @@ flutter:
   assets:
     - shorebird.yaml
     - assets/rahbar_new_logo.png
+    - assets/Rahbar Logo.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

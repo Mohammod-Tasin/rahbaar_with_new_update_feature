@@ -6,6 +6,7 @@ import 'package:rahbar_restarted/Pages/queriPage.dart';
 import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:url_launcher/url_launcher.dart'; // লিংক ওপেন করার জন্য এটি প্রয়োজন
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -34,6 +35,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    const String assetName = "assets/Rahbar Logo.svg";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -41,14 +43,12 @@ class _HomepageState extends State<Homepage> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              'assets/rahbar_new_logo.png',
-              height: 30,
-              width: 30,
+            SvgPicture.asset("assets/Rahbar Logo.svg",
+              height: 30, width: 30,
             ),
             const SizedBox(width: 8),
             Text(
-              "RAHBAR",
+              "RAHBAAR",
               style: GoogleFonts.ubuntu(color: const Color(0xFF000832)),
             ),
           ],
