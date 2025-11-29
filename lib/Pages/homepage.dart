@@ -48,7 +48,7 @@ class _HomepageState extends State<Homepage> {
             ),
             const SizedBox(width: 8),
             Text(
-              "Rahbaar",
+              "RAHBAR",
               style: GoogleFonts.ubuntu(color: const Color(0xFF000832)),
             ),
           ],
@@ -259,9 +259,9 @@ class _HomepageState extends State<Homepage> {
             );
           }
           // ===== পরিবর্তন: সরাসরি ডাউনলোডের লজিক =====
-          else if (item.title.contains("") || item.title.contains("")) {
+          else if (item.title.contains("Updates")) {
             // এখানে আপনার .apk ফাইলের ডাইরেক্ট ডাউনলোড লিংক দিন
-            // _launchDownloadUrl('https://github.com/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/latest/download/app-release.apk');
+            // _launchDownloadUrl('https://github.com/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/download/v23.02.03/app-release.apk');
           }
           // =========================================
         },

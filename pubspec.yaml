@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 23.02.03+1
+version: 23.02.05+1
 
 environment:
   sdk: ^3.8.1
@@ -103,16 +103,18 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
     image_path: "assets/rahbar_new_logo.png"
 
 flutter_native_splash:
   color: "#FFFFFF" # স্প্ল্যাশ স্ক্রিনের الخلفية রঙ (সাদা)
-  image: assets/icon/appLogo.jpg # আপনার লোগোর পাথ
+  image: assets/rahbar_new_logo.png # আপনার লোগোর পাথ
 
   # অ্যান্ড্রয়েডের জন্য নির্দিষ্ট কনফিগারেশন
   android_12:
     color: "#FFFFFF"
-    image: assets/icon/appLogo.jpg
+    image: assets/rahbar_new_logo.png
 
   # আপনি চাইলে gravity ব্যবহার করে লোগোকে মাঝে আনতে পারেন
   android_gravity: fill

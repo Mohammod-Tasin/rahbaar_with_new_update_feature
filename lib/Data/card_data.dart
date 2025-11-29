@@ -57,7 +57,7 @@ const List<CardItem> cardItems = [
   // ),
   CardItem(
     title: "Updates",
-    subtitle: "You will get latest update here when available",
+    subtitle: "Download the latest version here",
     icon: Icons.download_rounded,
     color: Color(0xFF000832),
   ),
