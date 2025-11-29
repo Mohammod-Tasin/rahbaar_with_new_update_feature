@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
-      title: "Rahbaar",
+      title: "Rahbar",
     );
   }
 }
