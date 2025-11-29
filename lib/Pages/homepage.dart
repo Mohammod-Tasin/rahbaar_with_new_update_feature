@@ -5,6 +5,7 @@ import 'package:rahbar_restarted/Pages/allAlumniPage.dart';
 import 'package:rahbar_restarted/Pages/queriPage.dart';
 import 'package:rahbar_restarted/Pages/currentStudentPage.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:url_launcher/url_launcher.dart'; // লিংক ওপেন করার জন্য এটি প্রয়োজন
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -16,6 +17,21 @@ class _HomepageState extends State<Homepage> {
   // ইংরেজি অ্যানিমেশন শুরু করার জন্য ফ্ল্যাগ
   bool _startEnglishAnimation = false;
 
+  // ===== সরাসরি ডাউনলোড লিংক ওপেন করার ফাংশন =====
+  Future<void> _launchDownloadUrl(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      // যদি লিংক ওপেন না হয়, একটি এরর মেসেজ দেখাবে
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $urlString')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +42,7 @@ class _HomepageState extends State<Homepage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/rahbar_new_logo.jpg',
+              'assets/icon/Logo.png',
               height: 30,
               width: 30,
             ),
@@ -55,7 +71,7 @@ class _HomepageState extends State<Homepage> {
             ),
             ListTile(
               leading: const Icon(Icons.school_rounded),
-              title: Text("Alumni",
+              title: Text("Alumnus",
                   style: GoogleFonts.ubuntu(
                       fontSize: 23, color: const Color(0xFF000832))),
               onTap: () {
@@ -118,7 +134,7 @@ class _HomepageState extends State<Homepage> {
                         DefaultTextStyle(
                           style: GoogleFonts.amiri(
                             // কুরআনিক স্টাইল ফন্ট
-                            fontSize: 28.0,
+                            fontSize: 30.0,
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFF000832),
                             height: 2.5, // ওভারল্যাপ ঠিক করার জন্য লাইন হাইট বাড়ানো হয়েছে
@@ -127,7 +143,7 @@ class _HomepageState extends State<Homepage> {
                           child: AnimatedTextKit(
                             animatedTexts: [
                               TypewriterAnimatedText(
-                                'وَأْمُرْ أَهْلَكَ بِالصَّلَاةِ وَاصْطَبِرْ عَلَيْهَا ۖ لَا نَسْأَلُكَ رِزْقًا ۖ نَحْنُ نَرْزُقُكَ ۗ وَالْعَاقِبَةُ لِلتَّقْوَىٰ',
+                                'وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا ۖ لَا نَسْـَٔلُكَ رِزْقًۭا ۖ نَّحْنُ نَرْزُقُكَ ۗ وَٱلْعَـٰقِبَةُ لِلتَّقْوَىٰ',
                                 speed: const Duration(milliseconds: 100),
                                 textAlign: TextAlign.center,
                               ),
@@ -150,7 +166,7 @@ class _HomepageState extends State<Homepage> {
                           DefaultTextStyle(
                             style: GoogleFonts.lora(
                               // ক্লাসিক সেরিফ ফন্ট
-                              fontSize: 16.0,
+                              fontSize: 18.0,
                               fontStyle: FontStyle.italic,
                               color: const Color(0xFF555555), // একটু হালকা রঙ
                             ),
@@ -224,23 +240,30 @@ class _HomepageState extends State<Homepage> {
       ),
       child: InkWell(
         onTap: () {
-          if (item.title == "Alumni page") {
+          // টাইটেলের নাম চেক করে নেভিগেশন
+          if (item.title.contains("Alumnus")) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Allalumnipage()),
             );
-          } else if (item.title == "Current Student Page") {
+          } else if (item.title.contains("Current Students")) {
             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => const Currentstudentpage()),
             );
-          } else if (item.title == "Queries or Suggestions") {
+          } else if (item.title.contains("Queries or Suggestions")) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Queripage()),
             );
           }
+          // ===== পরিবর্তন: সরাসরি ডাউনলোডের লজিক =====
+          else if (item.title.contains("Updates") || item.title.contains("Download")) {
+            // এখানে আপনার .apk ফাইলের ডাইরেক্ট ডাউনলোড লিংক দিন
+            _launchDownloadUrl('https://github.com/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/latest/download/app-release.apk');
+          }
+          // =========================================
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

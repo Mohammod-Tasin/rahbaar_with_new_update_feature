@@ -66,7 +66,7 @@ class _AllalumnipageState extends State<Allalumnipage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Alumni Directory", style: GoogleFonts.ubuntu()),
+        title: Text("Alumnus", style: GoogleFonts.ubuntu()),
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
