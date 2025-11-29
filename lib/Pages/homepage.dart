@@ -187,12 +187,12 @@ class _HomepageState extends State<Homepage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/Logo.png',
+              'assets/Rahbar Logo.png',
               height: 30,
               width: 30,
             ),
-            const SizedBox(width: 8),
-            Text("Rahbaar", style: GoogleFonts.ubuntu(
+            const SizedBox(width: 5),
+            Text("A H B A R", style: GoogleFonts.ubuntu(
               color: Color(0xFF000832)
             )),
           ],
