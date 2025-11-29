@@ -42,7 +42,7 @@ class _HomepageState extends State<Homepage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/icon/Logo.png',
+              'assets/rahbar_new_logo.png',
               height: 30,
               width: 30,
             ),
@@ -143,7 +143,7 @@ class _HomepageState extends State<Homepage> {
                           child: AnimatedTextKit(
                             animatedTexts: [
                               TypewriterAnimatedText(
-                                'وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا ۖ لَا نَسْـَٔلُكَ رِزْقًۭا ۖ نَّحْنُ نَرْزُقُكَ ۗ وَٱلْعَـٰقِبَةُ لِلتَّقْوَىٰ',
+                                'وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا ۖ لَا نَسْـَٔلُكَ رِزْقًۭا ۖ نَّحْنُ نَرْزُقُكَ ۗ وَٱلْعَـٰقِبَةُ لِلتَّقْوَىٰٰ',
                                 speed: const Duration(milliseconds: 100),
                                 textAlign: TextAlign.center,
                               ),
@@ -168,13 +168,13 @@ class _HomepageState extends State<Homepage> {
                               // ক্লাসিক সেরিফ ফন্ট
                               fontSize: 18.0,
                               fontStyle: FontStyle.italic,
-                              color: const Color(0xFF555555), // একটু হালকা রঙ
+                              color: Color(0xFFC5A059),
                             ),
                             textAlign: TextAlign.center,
                             child: AnimatedTextKit(
                               animatedTexts: [
                                 TypewriterAnimatedText(
-                                  'Bid your people to pray, and be diligent in ˹observing˺ it. We do not ask you to provide. It is We Who provide for you. And the ultimate outcome is ˹only˺ for ˹the people of˺ righteousness.',
+                                  'Bid your people to pray, and be diligent in ˹observing˺ it. We do not ask you to provide. It is We Who provide for you. And the ultimate outcome is ˹only˺ for ˹the people of˺ righteousness. 20:132',
                                   speed: const Duration(milliseconds: 50),
                                   textAlign: TextAlign.center,
                                 ),
@@ -259,9 +259,9 @@ class _HomepageState extends State<Homepage> {
             );
           }
           // ===== পরিবর্তন: সরাসরি ডাউনলোডের লজিক =====
-          else if (item.title.contains("Updates") || item.title.contains("Download")) {
+          else if (item.title.contains("") || item.title.contains("")) {
             // এখানে আপনার .apk ফাইলের ডাইরেক্ট ডাউনলোড লিংক দিন
-            _launchDownloadUrl('https://github.com/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/latest/download/app-release.apk');
+            // _launchDownloadUrl('https://github.com/Mohammod-Tasin/rahbaar_with_new_update_feature/releases/latest/download/app-release.apk');
           }
           // =========================================
         },

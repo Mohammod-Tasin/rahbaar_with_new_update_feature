@@ -21,7 +21,7 @@ class CardItem {
 const List<CardItem> cardItems = [
   CardItem(
     title: "Alumnus",
-    subtitle: "Get Info of Alumni's connected to Tabligh",
+    subtitle: "Get Info of Alumnus connected to Tabligh",
     icon: Icons.school_rounded,
     color: Color(0xFF000832),
   ),
@@ -57,9 +57,9 @@ const List<CardItem> cardItems = [
   // ),
   CardItem(
     title: "Updates",
-    subtitle: "Get the latest version from GitHub",
+    subtitle: "You will get latest update here when available",
     icon: Icons.download_rounded,
-    color: Colors.black,
+    color: Color(0xFF000832),
   ),
 
   CardItem(
