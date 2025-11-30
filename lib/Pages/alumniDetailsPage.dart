@@ -158,23 +158,23 @@ class Alumnidetailspage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ডেটাবেজ থেকে তথ্যগুলো বের করে আনা হচ্ছে
     final name = alumnus['name'] ?? 'N/A';
-    final series = alumnus['Series']?.toString() ?? 'N/A';
-    final department = alumnus['Department'] ?? 'N/A';
+    final series = alumnus['series']?.toString() ?? 'N/A';
+    final department = alumnus['dept'] ?? 'N/A';
     final email = alumnus['email'] ?? 'N/A';
-    final phone = alumnus['Phone No.'] ?? 'N/A';
+    final phone = alumnus['phone_wh'] ?? 'N/A';
     final alternativePhone =
-        alumnus['Alternative Phone No.'] ?? 'Not Available';
+        alumnus['alt_phn'] ?? 'Not Available';
     final presentAddress =
-        alumnus['Present Address in Detail'] ?? 'Not Available';
-    final college = alumnus['College'] ?? 'N/A';
-    final daysInTableegh = alumnus['Days in Tableegh'] ?? 'N/A';
-    final homeDistrict = alumnus['Home District'] ?? 'N/A';
-    final bloodGroup = alumnus['Blood Group'] ?? 'N/A';
+        alumnus['present_address'] ?? 'Not Available';
+    final college = alumnus['college'] ?? 'N/A';
+    final daysInTableegh = alumnus['days_in_tabligh'] ?? 'N/A';
+    final homeDistrict = alumnus['home_district'] ?? 'N/A';
+    final bloodGroup = alumnus['blood_group'] ?? 'N/A';
 
     final List<dynamic> careerHistory = alumnus['career_history'] ?? [];
 
     // ডেটাবেজ থেকে অন্যান্য তথ্যের সাথে ছবির URL টিও নিয়ে আসা হচ্ছে
-    final imageUrl = alumnus['profile_image_url'] ?? '';
+    final imageUrl = alumnus['profile_img_url'] ?? '';
 
     careerHistory.sort((a, b) {
       bool isAPresent = a['is_present'] ?? false;
@@ -259,14 +259,14 @@ class Alumnidetailspage extends StatelessWidget {
                       const Divider(),
                       _buildInfoRow(
                         icon: Icons.phone_outlined,
-                        title: "Phone",
+                        title: "Phone Number",
                         value: phone,
                         onTap: () => _launchPhone(phone, context),
                       ),
                       const Divider(),
                       _buildInfoRow(
                         icon: Icons.phone_android_outlined,
-                        title: "Alternative Phone",
+                        title: "Alternative Phone Number",
                         value: alternativePhone,
                         onTap: () => _launchPhone(alternativePhone, context),
                       ),

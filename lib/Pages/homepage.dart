@@ -127,12 +127,12 @@ class _HomepageState extends State<Homepage> {
       ),
       child: InkWell(
         onTap: () {
-          if (item.title == "Alumni page") {
+          if (item.title == "Alumnus") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Allalumnipage()),
             );
-          } else if (item.title == "Current Student Page") {
+          } else if (item.title == "Current Students") {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -187,13 +187,13 @@ class _HomepageState extends State<Homepage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/Logo.png',
+              'assets/Logo/Rahbar Logo.png',
               height: 30,
               width: 30,
             ),
-            const SizedBox(width: 8),
-            Text("Rahbaar", style: GoogleFonts.ubuntu(
-              color: Color(0xFF000832)
+            const SizedBox(width: 5),
+            Text("A H B A R", style: GoogleFonts.ubuntu(
+                color: Color(0xFF000832)
             )),
           ],
         ),
@@ -225,7 +225,7 @@ class _HomepageState extends State<Homepage> {
               leading: const Icon(Icons.people_rounded),
               title: Text("Current Students",
                   style: GoogleFonts.ubuntu(
-                    fontSize: 23,
+                      fontSize: 23,
                       color: Color(0xFF000832)
                   )),
               onTap: () {
@@ -289,7 +289,7 @@ class _HomepageState extends State<Homepage> {
                           child: AnimatedTextKit(
                             animatedTexts: [
                               TypewriterAnimatedText(
-                                'وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا ۖ لَا نَسْـَٔلُكَ رِزْقًۭا ۖ نَّحْنُ نَرْزُقُكَ ۗ وَٱلْعَـٰقِبَةُ لِلتَّقْوَىٰ',
+                                'وَأْمُرْ أَهْلَكَ بِٱلصَّلَوٰةِ وَٱصْطَبِرْ عَلَيْهَا ۖ لَا نَسْـَٔلُكَ رِزْقًۭا ۖ نَّحْنُ نَرْزُقُكَ ۗ وَٱلْعَـٰقِبَةُ لِلتَّقْوَىٰٰ',
                                 speed: const Duration(milliseconds: 100),
                                 textAlign: TextAlign.center,
                               ),

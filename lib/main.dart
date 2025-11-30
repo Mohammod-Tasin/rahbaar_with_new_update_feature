@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:rahbar_restarted/Pages/homepage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:rahbar_restarted/Pages/splash_screen.dart';
 
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
-      title: "Rahbaar",
+      title: "Rahbar",
     );
   }
 }

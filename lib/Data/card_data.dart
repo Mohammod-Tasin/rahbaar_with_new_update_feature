@@ -20,13 +20,13 @@ class CardItem {
 // By keeping it in a separate file, your UI code stays clean.
 const List<CardItem> cardItems = [
   CardItem(
-    title: "Alumni page",
+    title: "Alumnus",
     subtitle: "Get Info of Alumni's connected to Tabligh",
     icon: Icons.school_rounded,
     color: Color(0xFF000832),
   ),
   CardItem(
-    title: "Current Student Page",
+    title: "Current Students",
     subtitle: "Get Info of current students connected to Tabligh",
     icon: Icons.people_rounded,
     color: Color(0xFF000832),
